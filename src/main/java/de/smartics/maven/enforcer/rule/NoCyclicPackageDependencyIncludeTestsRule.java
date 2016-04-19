@@ -21,7 +21,7 @@ package de.smartics.maven.enforcer.rule;
  * <p>
  * This code is based on code by Daniel Seidewitz shown on <a href=
  * "http://stackoverflow.com/questions/3416547/maven-jdepend-fail-build-with-cycles"
- * >stackoverflow</a>.
+ * >Stackoverflow</a>.
  * </p>
  */
 public final class NoCyclicPackageDependencyIncludeTestsRule extends AbstractNoCyclicPackageDependencyRule

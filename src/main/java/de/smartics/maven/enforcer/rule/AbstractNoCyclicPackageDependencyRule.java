@@ -36,7 +36,7 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
  * <p>
  * This code is based on code by Daniel Seidewitz shown on <a href=
  * "http://stackoverflow.com/questions/3416547/maven-jdepend-fail-build-with-cycles"
- * >stackoverflow</a>.
+ * >Stackoverflow</a>.
  * </p>
  */
 public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerRule
