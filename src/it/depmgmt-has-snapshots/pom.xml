@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.smartics.maven.enforcer.it</groupId>
+  <artifactId>depmgmt-has-snapshots</artifactId>
+  <version>testing</version>
+  <packaging>pom</packaging>
+
+  <name>${project.artifactId}</name>
+  <description>
+    Test case where SNAPSHOT dependencies are in the dependency management
+    block.
+  </description>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>de.smartics.test.setup</groupId>
+        <artifactId>test-setup-artifacts-domain</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <id>enforce-project-rules</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <NoSnapshotDependenciesInDependencyManagementRule
+                  implementation="de.smartics.maven.enforcer.rule.NoSnapshotsInDependencyManagementRule" />
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>de.smartics.rules</groupId>
+            <artifactId>smartics-enforcer-rules</artifactId>
+            <version>@project.version@</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>
