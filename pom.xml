@@ -12,7 +12,7 @@
 
   <name>smartics Enforcer Rules for Maven</name>
   <description>
-    A collection of rules for the Maven enforcer plugin.
+    A collection of rules for the Maven Enforcer Plugin.
   </description>
   <url>${weburl}</url>
   <inceptionYear>2011</inceptionYear>
