@@ -5,7 +5,7 @@
 
   <groupId>de.smartics.rules</groupId>
   <artifactId>smartics-enforcer-rules</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>smartics Enforcer Rules for Maven</name>
   <description>
@@ -61,7 +61,7 @@
     <connection>scm:git:git@github.com:smartics/${project.artifactId}</connection>
     <developerConnection>scm:git:git@github.com:smartics/${project.artifactId}</developerConnection>
     <url>https://github.com/smartics/${project.artifactId}</url>
-    <tag>smartics-enforcer-rules-1.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
