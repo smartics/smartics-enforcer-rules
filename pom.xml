@@ -106,7 +106,12 @@
     <build.server.site.upload>scp://www.smartics.eu/home/smartics/public_html/${info.project.visibility}</build.server.site.upload>
     <build.server.repo.upload>dav:${info.server.repo.prefix}/repositories</build.server.repo.upload>
 
-    <!-- The following properties are accessible from site documentation and therefore contain no dots. -->
+    <!-- ... projectdoc configuration ...................................... -->
+
+    <url-nexus>https://oss.sonatype.org</url-nexus>
+    <nexus-default-repo-id>releases</nexus-default-repo-id>
+
+    <!-- ... Properties are accessible from site documentation and therefore contain no dots. -->
     <webroot>${info.server.site}</webroot>
     <weburl>${info.server.site}/${project.groupId}/${project.artifactId}/${project.version}</weburl>
     <webroot-projects>http://www.smartics.de/projects</webroot-projects>
