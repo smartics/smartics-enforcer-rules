@@ -31,8 +31,7 @@ import org.codehaus.plexus.util.StringUtils;
  * Checks that the dependency management block in a POM contains no snapshot
  * dependencies.
  */
-public class NoSnapshotsInDependencyManagementRule implements EnforcerRule
-{
+public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
 
   // ********************************* Fields *********************************
 
@@ -45,6 +44,17 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule
    * version.
    */
   private boolean onlyWhenRelease = true;
+
+  /**
+   * If set to <code>true</code> only resolved dependencies are checked. Per
+   * default also declared dependencies are taken into account. That is: if a
+   * BOM is a snapshot, but does not have dependencies to snapshots, a value of
+   * <code>false</code> would, a value of <code>true</code> would not raise an
+   * issue.
+   *
+   * @since 1.0.1
+   */
+  private boolean checkOnlyResolvedDependencies = false;
 
   // ****************************** Initializer *******************************
 
@@ -64,99 +74,90 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule
    * {@inheritDoc}
    */
   public void execute(final EnforcerRuleHelper helper)
-    throws EnforcerRuleException
-  {
+      throws EnforcerRuleException {
     final Log log = helper.getLog();
 
-    try
-    {
+    try {
       final MavenProject project = (MavenProject) helper.evaluate("${project}");
 
       final boolean isSnapshot = project.getArtifact().isSnapshot();
-      if (onlyWhenRelease && isSnapshot)
-      {
+      if (onlyWhenRelease && isSnapshot) {
         log.info(getCacheId() + ": Skipping since not a release.");
         return;
       }
 
       final DependencyManagement dependencyManagement =
           project.getModel().getDependencyManagement();
-      if (dependencyManagement == null)
-      {
+      if (dependencyManagement == null) {
         log.debug(getCacheId() + ": No dependency management block found.");
         return;
       }
 
-      final List<Dependency> dependencies =
-          dependencyManagement.getDependencies();
-      if (dependencies == null || dependencies.isEmpty())
-      {
-        log.debug(getCacheId()
-                  + ": No dependencies in dependency management block found.");
-        return;
+      if (!checkOnlyResolvedDependencies) {
+        final List<Dependency> declaredDependencies = project.getOriginalModel()
+            .getDependencyManagement().getDependencies();
+        if (declaredDependencies != null && !declaredDependencies.isEmpty()) {
+          checkDependenciesForSnapshots(log, declaredDependencies);
+        }
       }
 
+      final List<Dependency> dependencies =
+          dependencyManagement.getDependencies();
+      if (dependencies == null || dependencies.isEmpty()) {
+        log.debug(getCacheId()
+            + ": No dependencies in dependency management block found.");
+        return;
+      }
       checkDependenciesForSnapshots(log, dependencies);
-    }
-    catch (final ExpressionEvaluationException e)
-    {
-      throw new EnforcerRuleException("Unable to evaluate expression '"
-                                      + e.getLocalizedMessage() + "'.", e);
+    } catch (final ExpressionEvaluationException e) {
+      throw new EnforcerRuleException(
+          "Unable to evaluate expression '" + e.getLocalizedMessage() + "'.",
+          e);
     }
   }
 
   private void checkDependenciesForSnapshots(final Log log,
-      final List<Dependency> dependencies) throws EnforcerRuleException
-  {
+      final List<Dependency> dependencies) throws EnforcerRuleException {
     final StringBuilder buffer = new StringBuilder();
-    for (final Dependency dependency : dependencies)
-    {
+    for (final Dependency dependency : dependencies) {
       final String version = dependency.getVersion();
 
-      if (isSnapshot(version))
-      {
+      if (isSnapshot(version)) {
         buffer.append("\n  ").append(dependency);
-      }
-      else
-      {
+      } else {
         log.debug("  Not a SNAPSHOT: " + dependency);
       }
     }
 
-    if (buffer.length() > 0)
-    {
+    if (buffer.length() > 0) {
       throw new EnforcerRuleException(
           "Dependency Management contains SNAPSHOTS:" + buffer.toString()
               + "\n Please remove all SNAPSHOT dependencies!");
     }
   }
 
-  private static boolean isSnapshot(final String version)
-  {
+  private static boolean isSnapshot(final String version) {
     return StringUtils.isNotBlank(version) && version.endsWith("-SNAPSHOT");
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean isCacheable()
-  {
+  public boolean isCacheable() {
     return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean isResultValid(final EnforcerRule cachedRule)
-  {
+  public boolean isResultValid(final EnforcerRule cachedRule) {
     return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getCacheId()
-  {
+  public String getCacheId() {
     return "noSnapshotsInDependencyManagement";
   }
 
