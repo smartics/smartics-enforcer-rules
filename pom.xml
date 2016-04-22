@@ -477,6 +477,8 @@
             <exclude>**/goals.txt</exclude> <!-- shitty plugin -->
             <exclude>**/build.log</exclude> <!-- shitty plugin -->
             <exclude>.jupiter</exclude>
+            <exclude>**/*.md</exclude>
+            <exclude>**/.gitignore</exclude>
           </excludes>
           <mapping>
             <!--  Unfortunately we use xml.vm extensions to filter xdoc pages.
