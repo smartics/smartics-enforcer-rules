@@ -43,7 +43,9 @@
             <configuration>
               <rules>
                 <NoSnapshotDependenciesInDependencyManagementRule
-                  implementation="de.smartics.maven.enforcer.rule.NoSnapshotsInDependencyManagementRule" />
+                  implementation="de.smartics.maven.enforcer.rule.NoSnapshotsInDependencyManagementRule">
+                  <onlyWhenRelease>true</onlyWhenRelease>
+                </NoSnapshotDependenciesInDependencyManagementRule>
               </rules>
             </configuration>
           </execution>
