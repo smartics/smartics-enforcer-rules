@@ -16,12 +16,16 @@
     Test case to check that BOM SNAPSHOTs are recognized.
   </description>
 
+  <properties>
+    <version.bom>1.0.1-SNAPSHOT</version.bom>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>de.smartics.test.setup</groupId>
         <artifactId>test-setup-artifacts-bom</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>${version.bom}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -44,7 +48,9 @@
             <configuration>
               <rules>
                 <NoSnapshotDependenciesInDependencyManagementRule
-                  implementation="de.smartics.maven.enforcer.rule.NoSnapshotsInDependencyManagementRule" />
+                  implementation="de.smartics.maven.enforcer.rule.NoSnapshotsInDependencyManagementRule">
+                    <onlyWhenRelease>false</onlyWhenRelease>
+                </NoSnapshotDependenciesInDependencyManagementRule>
               </rules>
             </configuration>
           </execution>

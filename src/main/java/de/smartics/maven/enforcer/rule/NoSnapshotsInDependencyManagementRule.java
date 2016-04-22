@@ -15,8 +15,6 @@
  */
 package de.smartics.maven.enforcer.rule;
 
-import java.util.List;
-
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
@@ -26,6 +24,8 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.List;
 
 /**
  * Checks that the dependency management block in a POM contains no snapshot
@@ -43,7 +43,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
    * Usually this rule should only be enforced on projects with a release
    * version.
    */
-  private boolean onlyWhenRelease = true;
+  private final boolean onlyWhenRelease = true;
 
   /**
    * If set to <code>true</code> only resolved dependencies are checked. Per
@@ -54,7 +54,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
    *
    * @since 1.0.1
    */
-  private boolean checkOnlyResolvedDependencies = false;
+  private final boolean checkOnlyResolvedDependencies = false;
 
   // ****************************** Initializer *******************************
 
@@ -97,7 +97,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
         final List<Dependency> declaredDependencies = project.getOriginalModel()
             .getDependencyManagement().getDependencies();
         if (declaredDependencies != null && !declaredDependencies.isEmpty()) {
-          checkDependenciesForSnapshots(log, declaredDependencies);
+          checkDependenciesForSnapshots(helper, log, declaredDependencies);
         }
       }
 
@@ -108,7 +108,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
             + ": No dependencies in dependency management block found.");
         return;
       }
-      checkDependenciesForSnapshots(log, dependencies);
+      checkDependenciesForSnapshots(helper, log, dependencies);
     } catch (final ExpressionEvaluationException e) {
       throw new EnforcerRuleException(
           "Unable to evaluate expression '" + e.getLocalizedMessage() + "'.",
@@ -116,14 +116,15 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
     }
   }
 
-  private void checkDependenciesForSnapshots(final Log log,
-      final List<Dependency> dependencies) throws EnforcerRuleException {
+  private void checkDependenciesForSnapshots(final EnforcerRuleHelper helper,
+      final Log log, final List<Dependency> dependencies)
+      throws EnforcerRuleException {
     final StringBuilder buffer = new StringBuilder();
     for (final Dependency dependency : dependencies) {
-      final String version = dependency.getVersion();
+      final String version = resolveVersion(helper, dependency);
 
       if (isSnapshot(version)) {
-        buffer.append("\n  ").append(dependency);
+        buffer.append("\n  ").append(version).append(": ").append(dependency);
       } else {
         log.debug("  Not a SNAPSHOT: " + dependency);
       }
@@ -133,6 +134,19 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
       throw new EnforcerRuleException(
           "Dependency Management contains SNAPSHOTS:" + buffer.toString()
               + "\n Please remove all SNAPSHOT dependencies!");
+    }
+  }
+
+  private String resolveVersion(final EnforcerRuleHelper helper,
+      final Dependency dependency) {
+    final String plainVersion = dependency.getVersion();
+    try {
+      final Object versionInstance = helper.evaluate(plainVersion);
+      final String version =
+          versionInstance != null ? String.valueOf(versionInstance) : null;
+      return version;
+    } catch (final ExpressionEvaluationException e) {
+      return plainVersion;
     }
   }
 
