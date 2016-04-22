@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 /**
- * Provides rules for the <a href="https://maven.apache.org/enforcer/maven-enforcer-plugin/">Maven Enforcer Plugin</a>.
+ * Provides rules for the
+ * <a href="https://maven.apache.org/enforcer/maven-enforcer-plugin/">Maven
+ * Enforcer Plugin</a>.
  *
  * @since 1.0
  */

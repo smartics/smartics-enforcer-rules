@@ -39,8 +39,8 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
  * >Stackoverflow</a>.
  * </p>
  */
-public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerRule
-{
+public abstract class AbstractNoCyclicPackageDependencyRule
+    implements EnforcerRule {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -67,69 +67,55 @@ public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerR
   // CHECKSTYLE:OFF
   @SuppressWarnings("unchecked")
   public void execute(final EnforcerRuleHelper helper)
-    throws EnforcerRuleException
-  {
+      throws EnforcerRuleException {
     final Log log = helper.getLog();
 
-    try
-    {
+    try {
       final MavenProject project = (MavenProject) helper.evaluate("${project}");
       final String projectName = project.getName();
 
-      final File classesDir =
-          new File((String) helper.evaluate("${project.build.outputDirectory}"));
+      final File classesDir = new File(
+          (String) helper.evaluate("${project.build.outputDirectory}"));
 
-      if (classesDir.canRead())
-      {
+      if (classesDir.canRead()) {
         final JDepend jdepend = new JDepend();
         jdepend.addDirectory(classesDir.getAbsolutePath());
         addTestClassesIfRequested(helper, classesDir, jdepend);
 
         final Collection<JavaPackage> packages = jdepend.analyze();
-        if (jdepend.containsCycles())
-        {
+        if (jdepend.containsCycles()) {
           final String buffer = collectCycles(packages);
           throw new EnforcerRuleException(
               "Dependency cycle check found package cycles in '" + projectName
                   + "': " + buffer);
-        }
-        else
-        {
+        } else {
           log.info("No package cycles found in '" + projectName + "'.");
         }
-      }
-      else
-      {
+      } else {
         log.warn("Skipping package cycle analysis since '" + classesDir
-                 + "' does not exist.");
+            + "' does not exist.");
       }
-    }
-    catch (final ExpressionEvaluationException e)
-    {
+    } catch (final ExpressionEvaluationException e) {
       throw new EnforcerRuleException(
           "Dependency cycle check is unable to evaluate expression '"
-              + e.getLocalizedMessage() + "'.", e);
-    }
-    catch (final IOException e)
-    {
+              + e.getLocalizedMessage() + "'.",
+          e);
+    } catch (final IOException e) {
       throw new EnforcerRuleException(
           "Dependency cycle check is unable to access a classes directory '"
-              + e.getLocalizedMessage() + "'.", e);
+              + e.getLocalizedMessage() + "'.",
+          e);
     }
   }
   // CHECKSTYLE:ON
 
   private void addTestClassesIfRequested(final EnforcerRuleHelper helper,
       final File classesDir, final JDepend jdepend)
-    throws ExpressionEvaluationException, IOException
-  {
-    if (includeTests())
-    {
-      final File testClassesDir =
-          new File(
-              (String) helper.evaluate("${project.build.testOutputDirectory}"));
-      if (testClassesDir.canRead())
-      {
+      throws ExpressionEvaluationException, IOException {
+    if (includeTests()) {
+      final File testClassesDir = new File(
+          (String) helper.evaluate("${project.build.testOutputDirectory}"));
+      if (testClassesDir.canRead()) {
         jdepend.addDirectory(classesDir.getAbsolutePath());
       }
     }
@@ -139,21 +125,17 @@ public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerR
    * Checks if test classes are to be included in the cycle check.
    *
    * @return <code>true</code> if test packages are considered in the test,
-   * <code>false</code> otherwise.
+   *         <code>false</code> otherwise.
    */
   protected abstract boolean includeTests();
 
-  private static String collectCycles(final Collection<JavaPackage> packages)
-  {
+  private static String collectCycles(final Collection<JavaPackage> packages) {
     final StringBuilder buffer = new StringBuilder(512);
-    for (final JavaPackage aPackage : packages)
-    {
+    for (final JavaPackage aPackage : packages) {
       final List<JavaPackage> dependencies = new ArrayList<JavaPackage>();
       aPackage.collectCycle(dependencies);
-      if (!dependencies.isEmpty())
-      {
-        for (final JavaPackage dependency : dependencies)
-        {
+      if (!dependencies.isEmpty()) {
+        for (final JavaPackage dependency : dependencies) {
           buffer.append("->").append(dependency.getName());
         }
         buffer.append('\n');
@@ -170,8 +152,7 @@ public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerR
    *
    * @see org.apache.maven.enforcer.rule.api.EnforcerRule#getCacheId()
    */
-  public String getCacheId()
-  {
+  public String getCacheId() {
     return "";
   }
 
@@ -183,8 +164,7 @@ public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerR
    *
    * @see org.apache.maven.enforcer.rule.api.EnforcerRule#isCacheable()
    */
-  public boolean isCacheable()
-  {
+  public boolean isCacheable() {
     return false;
   }
 
@@ -196,8 +176,7 @@ public abstract class AbstractNoCyclicPackageDependencyRule implements EnforcerR
    *
    * @see org.apache.maven.enforcer.rule.api.EnforcerRule#isResultValid(org.apache.maven.enforcer.rule.api.EnforcerRule)
    */
-  public boolean isResultValid(final EnforcerRule rule)
-  {
+  public boolean isResultValid(final EnforcerRule rule) {
     return false;
   }
 

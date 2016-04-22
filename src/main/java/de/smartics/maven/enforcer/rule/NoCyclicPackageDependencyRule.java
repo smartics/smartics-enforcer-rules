@@ -24,9 +24,8 @@ package de.smartics.maven.enforcer.rule;
  * >Stackoverflow</a>.
  * </p>
  */
-public final class NoCyclicPackageDependencyRule extends
-    AbstractNoCyclicPackageDependencyRule
-{
+public final class NoCyclicPackageDependencyRule
+    extends AbstractNoCyclicPackageDependencyRule {
   // ********************************* Fields *********************************
 
   // --- constants ------------------------------------------------------------
@@ -48,8 +47,7 @@ public final class NoCyclicPackageDependencyRule extends
   // --- business -------------------------------------------------------------
 
   @Override
-  protected boolean includeTests()
-  {
+  protected boolean includeTests() {
     return false;
   }
 
