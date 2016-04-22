@@ -43,7 +43,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
    * Usually this rule should only be enforced on projects with a release
    * version.
    */
-  private final boolean onlyWhenRelease = true;
+  private boolean onlyWhenRelease = true;
 
   /**
    * If set to <code>true</code> only resolved dependencies are checked. Per
@@ -54,7 +54,7 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
    *
    * @since 1.0.1
    */
-  private final boolean checkOnlyResolvedDependencies = false;
+  private boolean checkOnlyResolvedDependencies = false;
 
   // ****************************** Initializer *******************************
 
