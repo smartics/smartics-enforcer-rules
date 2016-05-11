@@ -93,12 +93,16 @@ public class NoSnapshotsInDependencyManagementRule implements EnforcerRule {
         return;
       }
 
-      if (!checkOnlyResolvedDependencies) {
-        final List<Dependency> declaredDependencies = project.getOriginalModel()
-            .getDependencyManagement().getDependencies();
-        if (declaredDependencies != null && !declaredDependencies.isEmpty()) {
-          checkDependenciesForSnapshots(helper, log, declaredDependencies);
-        }
+        if ( !checkOnlyResolvedDependencies ) {
+            final DependencyManagement originalDependencyManagement = project
+                .getOriginalModel().getDependencyManagement();
+            if ( originalDependencyManagement != null ) {
+                final List<Dependency> declaredDependencies =
+                    originalDependencyManagement.getDependencies();
+                if ( declaredDependencies != null && !declaredDependencies.isEmpty() ) {
+                    checkDependenciesForSnapshots( helper, log, declaredDependencies );
+                }
+            }
       }
 
       final List<Dependency> dependencies =
