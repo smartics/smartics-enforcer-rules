@@ -56,6 +56,11 @@
       <organizationUrl>http://www.smartics.de/</organizationUrl>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>barthel</name>
+    </contributor>
+  </contributors>
 
   <scm>
     <connection>scm:git:git@github.com:smartics/${project.artifactId}</connection>
