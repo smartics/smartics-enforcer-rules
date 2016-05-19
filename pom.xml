@@ -140,6 +140,7 @@
     <maven-site-plugin.version>3.3</maven-site-plugin.version>
     <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
     <version.maven-javadoc-plugin>2.10.3</version.maven-javadoc-plugin>
+    <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
 
     <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
     <!--
