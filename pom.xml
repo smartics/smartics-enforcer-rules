@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 
+<!--suppress UnresolvedMavenProperty -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -156,7 +157,7 @@
     <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
     <version.jdepend>2.9.1</version.jdepend>
     <plexus-container-default>1.6</plexus-container-default>
-    <junit_version>4.8.2</junit_version>
+    <junit_version>4.13.1</junit_version>
   </properties>
 
   <dependencies>
@@ -252,8 +253,8 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>${version.maven-jar-plugin}</version>
           <configuration>
-            <index>true</index>
             <archive>
+              <index>true</index>
               <manifest>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
@@ -365,6 +366,7 @@
             <buildDatePattern>dd.MM.yyyy HH:mm:ss</buildDatePattern>
           </configuration>
         </plugin>
+        <!--
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -401,7 +403,7 @@
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
-        </plugin>
+        </plugin> -->
       </plugins>
     </pluginManagement>
 
