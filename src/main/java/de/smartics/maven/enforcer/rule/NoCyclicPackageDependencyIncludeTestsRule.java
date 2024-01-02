@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2020 smartics, Kronseder & Reiner GmbH
+ * Copyright 2011-2024 smartics, Kronseder & Reiner GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
